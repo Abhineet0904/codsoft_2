@@ -58,23 +58,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun getQuote() {
 
-        //LAUNCH A LIGHTWEIGHT THREAD FOR ASYNCHRONOUS PROGRAMMING IN THE GLOBAL SCOPE.
         GlobalScope.launch {
             try
             {
-                //MAKES A NETWORK REQUEST USING A RETROFIT API TO FETCH A RANDOM QUOTE.
                 val result = RetrofitInstance.quoteApi.getRandomQuote()
 
-                /*ENSURES THAT THE HTTP RESPONSE STATUS CODE INDICATES SUCCESS (2xx) AND THE
-                BODY OF THE RESPONSE IS NOT NULL. */
                 if (result.isSuccessful && result.body() != null)
                 {
-                    //"runOnUiThread {}" UPDATES THE UI COMPONENTS ON THE MAIN THREAD.
                     runOnUiThread {
                         result.body()!!.first().let {
-
-                            /*ACCESS THE NON-NULL BODY OF THE RESPONSE AND RETRIEVE THE FIRST ELEMENT
-                            FROM THE RESPONSE IF THE RESPONSE BODY IS A LIST. */
+                            
                             quoteText.text = it.q
                             authorText.text = it.a
                         }
@@ -83,7 +76,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 else
                 {
-                    //"withContext(Dispatchers.Main)" SWITCHES THE COROUTINE CONTEXT TO THE MAIN THREAD.
                     withContext(Dispatchers.Main)
                     {
                         Toast.makeText(this@MainActivity, "No quote displayed",
